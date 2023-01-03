@@ -146,3 +146,31 @@ networks:
   jenkins-net:
 EOF
 fi
+
+#Install mongodb
+if
+        [ "$HOSTNAME" = dockerenv-mongo ];
+then
+mkdir /home/vagrant/mongo && cd /home/vagrant/mongo
+cat >> docker-compose.yml << EOF
+version: '3'
+
+services:
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: MongoDB2019!
+    ports:
+      - "27017:27017"
+    volumes:
+      - /home/MongoDB:/data/db
+    networks:
+      - mongo-compose-network
+
+networks: 
+    mongo-compose-network:
+      driver: bridge
+EOF
+docker-compose up -d
+fi
